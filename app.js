@@ -13,10 +13,10 @@ const dinnerArray = [
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const createWeeklyMeal = (day, meal) => {
+const createWeeklyMeal = (day, mealName) => {
     return {
         day: day,
-        meal: meal
+        mealName: mealName
     }
 }
 
@@ -24,8 +24,9 @@ const weeklyDinnerAgenda = (daysOfWeek, dinnerArray) => {
     let agenda = [];
     for (let index = 0; index < 7; index++) {
         const currentDay = daysOfWeek[index];
-        const currentMeal = dinnerArray[Math.floor(Math.random() * dinnerArray.length)].name;
-        const newMeal = createWeeklyMeal(currentDay, currentMeal);
+        const currentRandomIndex = Math.floor(Math.random() * dinnerArray.length);
+        const currentMeal = dinnerArray.splice(currentRandomIndex, 1);
+        const newMeal = createWeeklyMeal(currentDay, currentMeal[0].name);
         agenda += newMeal;
         console.log(newMeal);
     }
