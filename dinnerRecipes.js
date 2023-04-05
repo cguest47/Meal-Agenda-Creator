@@ -8,7 +8,8 @@ const dinnerArray = [
     {name: 'Spaghetti'},
     {name: 'Tacos'},
     {name: 'Kelsee\'s Tortellini'},
-    {name: 'Stir Fry'}
+    {name: 'Stir Fry'},
+    {name: 'Creamy Chicken'}
 ];
 
 module.exports = {dinnerArray};

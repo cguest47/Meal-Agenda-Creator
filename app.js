@@ -21,7 +21,6 @@ const weeklyDinnerAgenda = (daysOfWeek, dinnerArray) => {
         const currentMeal = dinnerArray.splice(currentRandomIndex, 1);
         const newMeal = createWeeklyMeal(currentDay, currentMeal[0].name);
         agenda.push(newMeal);
-        console.log(newMeal);
     }
     console.log(agenda);
     return JSON.stringify(agenda);
