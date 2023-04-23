@@ -3,7 +3,5 @@ class DailyMeal {
         this.day = day;
         this.mealName = mealName;
     }
-    
 }
-
 module.exports = DailyMeal;
