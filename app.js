@@ -3,7 +3,6 @@ const {dinnerArray} = require('./dinnerRecipes');
 const DailyMeal = require("./DailyMeal");
 const readline = require('node:readline');
 const { stdin: input, stdout: output } = require('node:process');
-// const http = require('node:http');
 
 /**
  * This function takes two parameters, day and mealName, to create a new Meal object, which is later referenced for showing recipes for the week
@@ -26,7 +25,7 @@ const createDailyMeal = (day, mealName) => {
 const weeklyDinnerAgenda = (daysOfWeek, dinnerArray) => {
     // initialize an agenda array
     let agenda = [];
-    // loop through the daysOfWeek array and 
+    // loop through the daysOfWeek array
     for (let i = 0; i < daysOfWeek.length; i++) {
         // generate a random index of the dinnerArray
         const randomIndex = Math.floor(Math.random() * dinnerArray.length);
@@ -36,42 +35,65 @@ const weeklyDinnerAgenda = (daysOfWeek, dinnerArray) => {
         const dailyMeal = createDailyMeal(daysOfWeek[i], meal[0].name);
         agenda.push(dailyMeal);
     }
-    console.log(agenda);
-    return JSON.stringify(agenda);
+    return agenda;
 };
 
-const Run = () => {
-    weeklyDinnerAgenda(DAYS_OF_WEEK, dinnerArray);
-
-    const rl = readline.createInterface({ input, output });
-    rl.question('Will you be attending trivia this Wednesday? (y/n) ', (answer) => {
-        // TODO: Log the answer in a database
-        console.log(`Thank you for your valuable feedback: ${answer}`);
-
-        rl.question('Do you plan on scheduling a date night this week? (y/n) ', (answer) => {
-            // TODO: Log the answer in a database
+/**
+ * This function resolves a promise that asks a user a question and returns the response asynchronously
+ * 
+ * @param {readline} rl - readline stream
+ * @param {string} questionString - the question the user wants to ask
+ * @returns 
+ */
+const question = (rl, questionString) => {
+    return new Promise((resolve, reject) => {
+        rl.question(questionString, (answer) => {
+            answer = answer.toUpperCase();
+            if (answer == "YES") {answer = "Y"};
             console.log(`Thank you for your valuable feedback: ${answer}`);
-    
-            rl.close();
+            resolve(answer);
         });
-        
-    });
+    })
+}
+
+/**
+ * Asks the questions and returns the answers
+ * 
+ * @param {string} triviaQuestion 
+ * @param {string} dateNightQuestion 
+ * @param {readline} rl - readline stream 
+ */
+const questions = async (triviaQuestion, dateNightQuestion, rl) => {
+    const triviaAnswer = await question(rl, triviaQuestion);
+    const dateNightAnswer = await question(rl, dateNightQuestion);
+    rl.close();
+    return {
+        triviaAnswer: triviaAnswer,
+        dateNightAnswer: dateNightAnswer
+    };
+}
+
+/**
+ * Asynchronous function that runs the weekly dinner agenda creation, asks questions, processes responses and logs the repsonse to the console
+ */
+const Run = async () => {
+    // fill in this week's agenda with meals and log
+    let thisWeeksAgenda = weeklyDinnerAgenda(DAYS_OF_WEEK, dinnerArray);
+    console.log(thisWeeksAgenda);
+    // initialize a read/write stream to further refine the output
+    const rl = readline.createInterface({ input, output });
+    // define questions to ask for nightly activities
+    const triviaQuestion = 'Will you be attending trivia this Wednesday? (y/n) ';
+    const dateNightQuestion = 'Do you plan on scheduling a date night this Saturday? (y/n) ';
+    // call ascynchronous function that returns the 
+    const answers = await questions(triviaQuestion, dateNightQuestion, rl);
+    if (answers.triviaAnswer == "Y") {
+        thisWeeksAgenda[2].mealName = "Eating out for trivia";
+    }
+    if (answers.dateNightAnswer == "Y") {
+        thisWeeksAgenda[5].mealName = "Date night, baby!";
+    }
+    console.log(thisWeeksAgenda);
 }
 
 Run();
-
-
-// const hostname = '127.0.0.1';
-// const port = 3000;
-
-//const weeklyAgenda = weeklyDinnerAgenda(DAYS_OF_WEEK, dinnerArray);
-
-// const server = http.createServer((req, res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Content-Type', 'text/plain');
-//     res.end(weeklyAgenda);
-//   });
-
-// server.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
-//   });
