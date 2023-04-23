@@ -1,5 +1,5 @@
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const {dinnerArray} = require('./dinnerRecipes');
+const {dinnerArray, sundayDinnerArray} = require('./dinnerRecipes');
 const DailyMeal = require("./DailyMeal");
 const readline = require('node:readline');
 const { stdin: input, stdout: output } = require('node:process');
@@ -22,18 +22,29 @@ const createDailyMeal = (day, mealName) => {
  * @param {array} dinnerArray - the array of dinner recipe objects
  * @returns array of DailyMeal objects
  */
-const weeklyDinnerAgenda = (daysOfWeek, dinnerArray) => {
+const weeklyDinnerAgenda = (daysOfWeek, dinnerArray, sundayDinnerArray) => {
     // initialize an agenda array
     let agenda = [];
     // loop through the daysOfWeek array
     for (let i = 0; i < daysOfWeek.length; i++) {
-        // generate a random index of the dinnerArray
-        const randomIndex = Math.floor(Math.random() * dinnerArray.length);
-        // select and remove meal from the dinnerArray
-        const meal = dinnerArray.splice(randomIndex, 1);
-        // call the createDailyMeal function and retrun a new DailyMeal object
-        const dailyMeal = createDailyMeal(daysOfWeek[i], meal[0].name);
-        agenda.push(dailyMeal);
+        // use weekly dinnerArray
+        if (i != 6 ) {
+            // generate a random index of the dinnerArray
+            const randomIndex = Math.floor(Math.random() * dinnerArray.length);
+            // select and remove meal from the dinnerArray
+            const meal = dinnerArray.splice(randomIndex, 1);
+            // call the createDailyMeal function and retrun a new DailyMeal object
+            const dailyMeal = createDailyMeal(daysOfWeek[i], meal[0].name);
+            agenda.push(dailyMeal);
+        } else { //for Sunday night dinners
+            // generate a random index of the sundayDinnerArray
+            const randomIndex = Math.floor(Math.random() * sundayDinnerArray.length);
+            // select and remove meal from the dinnerArray
+            const meal = sundayDinnerArray.splice(randomIndex, 1);
+            // call the createDailyMeal function and retrun a new DailyMeal object
+            const dailyMeal = createDailyMeal(daysOfWeek[i], meal[0].name);
+            agenda.push(dailyMeal);
+        }
     }
     return agenda;
 };
@@ -78,7 +89,7 @@ const questions = async (triviaQuestion, dateNightQuestion, rl) => {
  */
 const Run = async () => {
     // fill in this week's agenda with meals and log
-    let thisWeeksAgenda = weeklyDinnerAgenda(DAYS_OF_WEEK, dinnerArray);
+    let thisWeeksAgenda = weeklyDinnerAgenda(DAYS_OF_WEEK, dinnerArray, sundayDinnerArray);
     console.log(thisWeeksAgenda);
     // initialize a read/write stream to further refine the output
     const rl = readline.createInterface({ input, output });
