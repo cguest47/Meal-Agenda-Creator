@@ -19,6 +19,9 @@ const dinnerArray = [
     {name: 'Lemon Chicken'},
     {name: 'Lasagna'}, 
     {name: 'Chicken Quesadilla'},
+    {name: 'Burgers'},
+    {name: 'Brats'},
+    {name: 'Chicken Wings'},
     {name: 'One-Pan Cocunut-Lime Chicken'}
 ];
 
