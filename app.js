@@ -12,7 +12,7 @@ const { stdin: input, stdout: output } = require('node:process');
  * @returns DailyMeal object
  */
 const createDailyMeal = (day, mealName) => {
-    return new DailyMeal(day, mealName);
+    return new DailyMeal(day, mealName); 
 }
 
 /**
@@ -20,6 +20,7 @@ const createDailyMeal = (day, mealName) => {
  * 
  * @param {array} daysOfWeek - the seven days of the week, starting with Monday and ending with Sunday
  * @param {array} dinnerArray - the array of dinner recipe objects
+ * @param {array} sundayDinnerArray - the array of dinner recipe objects
  * @returns array of DailyMeal objects
  */
 const weeklyDinnerAgenda = (daysOfWeek, dinnerArray, sundayDinnerArray) => {
